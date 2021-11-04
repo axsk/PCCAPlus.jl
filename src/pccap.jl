@@ -1,7 +1,7 @@
 import Arpack: eigs
 using LinearAlgebra
 
-function pccap(T::Matrix, n::Integer; optimize = false)
+function pcca(T::Matrix, n::Integer; optimize = false)
     israte = isratematrix(T)
     pi     = stationarydensity(T, israte)
     X, λ   = schurvectors(T, pi, n, israte)
@@ -17,11 +17,11 @@ end
 
 function stationarydensity(T, israte=isratematrix(T))
     which = israte ? :SM : :LM
-    pi = eigs(T', nev=1, which=which)[2]
+    pi = eigs(T', nev=1, which=which)[2] |> vec
+	#pi = eigvecs(T, sortby=real)[:,end]
     @assert isreal(pi)
-    pi = abs.(pi) |> vec
+    pi = abs.(pi)
     pi = pi / sum(pi)
-    #ones(length(pi))
 end
 
 function makeprobabilistic(X::Matrix, optimize::Bool)
@@ -36,6 +36,10 @@ end
 function crispassignments(chi)
      assignments = mapslices(argmax, chi, dims=2) |> vec
 end
+
+abstract type BaseSolver end
+abstract type ArnoldiSolver end
+abstract type KrylovSolver end
 
 function schurvectors(T, pi, n, israte)
     Tw = Diagonal(sqrt.(pi))*T*Diagonal(1 ./ sqrt.(pi)) # rescale to keep markov property
@@ -117,23 +121,9 @@ function opt(A0, X)
     return feasiblize!(A, X)
 end
 
-function randomstochasticmatrix(n, reversible=true)
-    P = rand(n,n)
-    if reversible
-        P = (P + P') / 2
-    end
-    P ./= sum(P, dims=2)
-end
+
 
 function isreversible(P, pi=stationarydensity(P))
     db = [pi[i] * P[i,j] - pi[j] * P[j,i] for i =1:5, j=1:5]
     all(isapprox.(db, 0, atol=1e-8))
 end
-
-function test()
-    χ = pccap(randomstochasticmatrix(8), 2)
-    a = crispassignments(χ)
-    χ, a
-end
-
-test()

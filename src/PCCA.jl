@@ -1,5 +1,7 @@
 module PCCA
 
-# Write your package code here.
+include("pccap.jl")
+
+export pcca
 
 end
