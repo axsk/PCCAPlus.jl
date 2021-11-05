@@ -15,16 +15,19 @@ using Test
 		P ./= sum(P, dims=2)
 	end
 
-	P = randomstochasticmatrix(8)
 
-	for method in [PCCA.BaseSolver, PCCA.ArnoldiSolver, PCCA.KrylovSolver]
 
-		@testset "$method" begin
-				χ = pcca(P, 2, solver=method())
+	@testset "Reversible = $rev" for rev in [true, false]
+		P = [randomstochasticmatrix(3+mod(i,12), rev) for i in 1:10]
+		@testset "Method $method" for method in [PCCA.BaseSolver, PCCA.ArnoldiSolver, PCCA.KrylovSolver]
+			for P in P, n in 2:size(P,1)-1
+				χ = pcca(P, n, solver=method(), optimize=true)
 				a = PCCA.crispassignments(χ)
 
 				#@show χ
 				@test all(sum(χ, dims=2) .≈ 1)
+			end
 		end
 	end
+
 end

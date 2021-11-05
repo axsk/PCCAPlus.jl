@@ -5,6 +5,7 @@ function pcca(T::Matrix, n::Integer; optimize = false, solver=BaseSolver())
     israte = isratematrix(T)
     pi     = stationarydensity(T, israte)
     X, λ   = schurvectors(T, pi, n, israte, solver)
+	assertstructure(X, pi)
     chi    = makeprobabilistic(X, optimize)
 end
 
@@ -37,48 +38,9 @@ function crispassignments(chi)
      assignments = mapslices(argmax, chi, dims=2) |> vec
 end
 
-struct BaseSolver end
-struct ArnoldiSolver end
-struct KrylovSolver end
-
-function schurvectors(T, pi, n, israte, ::BaseSolver)
-    Tw = Diagonal(sqrt.(pi))*T*Diagonal(1 ./ sqrt.(pi)) # rescale to keep markov property
-    Sw = schur!(Tw)                       # returns orthonormal vecs by def
-    Xw, λ = selclusters!(Sw, n, israte)
-    X  = Diagonal(1 ./sqrt.(pi)) * Xw              # scale back
-    X  = X[1,1]>0 ? X : -X
-    X, λ
-end
-
-import ArnoldiMethod
-function schurvectors(T, pi, n, israte, ::ArnoldiSolver)
-	s, hist = partialschur(T; nev=n, which=LM())
-	X = collect(s.Q)
-	X ./= X[1,1]
-	X, s.eigenvalues
-end
-
-import KrylovKit
-function schurvectors(T, pi, n, israte, ::KrylovSolver)
-	init = pi
-	R, Q, v, info  =schursolve(T, pi, n, :LM, KrylovKit.Arnoldi())
-	X = reduce(hcat, Q)
-	X = X ./ X[1,1]
-	X, v
-end
-
-# select the schurvectors corresponding to the n abs-largest eigenvalues
-# if reverse==true select highest abs value, otherwise select lowest (for rate matrices)
-function selclusters!(S, n, ratematrix)
-    ind = sortperm(abs.(S.values), rev=!ratematrix) # get indices for dominant eigenvalues
-    select = zeros(Bool, size(ind))           # create selection vector
-    select[ind[1:n]] .= true
-    S = ordschur!(S, select)                  # reorder selected vectors to the left
-    if !isapprox(S.T[n+1, n], 0)                       # check if we are cutting along a schur block
-        @error("conjugated eigenvector missing")
-        display(S.T)
-    end
-    S.vectors[:,1:n], S.values[1:n]       # select first n vectors
+function assertstructure(X, pi)
+	@assert X' * Diagonal(pi) * X ≈ I
+	@assert X[:,1] ≈ ones(length(pi))
 end
 
 # compute initial guess based on indexmap
