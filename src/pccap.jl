@@ -1,10 +1,10 @@
 import Arpack: eigs
 using LinearAlgebra
 
-function pcca(T::Matrix, n::Integer; optimize = false)
+function pcca(T::Matrix, n::Integer; optimize = false, solver=BaseSolver())
     israte = isratematrix(T)
     pi     = stationarydensity(T, israte)
-    X, λ   = schurvectors(T, pi, n, israte)
+    X, λ   = schurvectors(T, pi, n, israte, solver)
     chi    = makeprobabilistic(X, optimize)
 end
 
@@ -37,17 +37,34 @@ function crispassignments(chi)
      assignments = mapslices(argmax, chi, dims=2) |> vec
 end
 
-abstract type BaseSolver end
-abstract type ArnoldiSolver end
-abstract type KrylovSolver end
+struct BaseSolver end
+struct ArnoldiSolver end
+struct KrylovSolver end
 
-function schurvectors(T, pi, n, israte)
+function schurvectors(T, pi, n, israte, ::BaseSolver)
     Tw = Diagonal(sqrt.(pi))*T*Diagonal(1 ./ sqrt.(pi)) # rescale to keep markov property
     Sw = schur!(Tw)                       # returns orthonormal vecs by def
     Xw, λ = selclusters!(Sw, n, israte)
     X  = Diagonal(1 ./sqrt.(pi)) * Xw              # scale back
     X  = X[1,1]>0 ? X : -X
     X, λ
+end
+
+import ArnoldiMethod
+function schurvectors(T, pi, n, israte, ::ArnoldiSolver)
+	s, hist = partialschur(T; nev=n, which=LM())
+	X = collect(s.Q)
+	X ./= X[1,1]
+	X, s.eigenvalues
+end
+
+import KrylovKit
+function schurvectors(T, pi, n, israte, ::KrylovSolver)
+	init = pi
+	R, Q, v, info  =schursolve(T, pi, n, :LM, KrylovKit.Arnoldi())
+	X = reduce(hcat, Q)
+	X = X ./ X[1,1]
+	X, v
 end
 
 # select the schurvectors corresponding to the n abs-largest eigenvalues

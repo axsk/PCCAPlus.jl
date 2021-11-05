@@ -15,12 +15,16 @@ using Test
 		P ./= sum(P, dims=2)
 	end
 
-	function test()
-		χ = pcca(randomstochasticmatrix(8), 2)
-		a = PCCA.crispassignments(χ)
+	P = randomstochasticmatrix(8)
 
-		@test all(sum(χ, dims=2) .≈ 1)
+	for method in [PCCA.BaseSolver, PCCA.ArnoldiSolver, PCCA.KrylovSolver]
+
+		@testset "$method" begin
+				χ = pcca(P, 2, solver=method())
+				a = PCCA.crispassignments(χ)
+
+				#@show χ
+				@test all(sum(χ, dims=2) .≈ 1)
+		end
 	end
-
-	test()
 end
