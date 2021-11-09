@@ -12,6 +12,10 @@ Optim = "429524aa-4258-5aef-a3af-852621145aeb"
 
 [compat]
 julia = "1.6"
+ArnoldiMethod = "0.2"
+Arpack = "0.5"
+KrylovKit = "0.5"
+Optim = "1"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
