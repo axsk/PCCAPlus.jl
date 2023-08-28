@@ -1,7 +1,7 @@
 import Arpack: eigs
 using LinearAlgebra
 
-function pcca(T::Matrix, n::Integer; optimize = false, solver=BaseSolver())
+function pcca(T::AbstractMatrix, n::Integer; optimize = false, solver=BaseSolver())
     israte = isratematrix(T)
     pi     = stationarydensity(T, israte)
     X, λ   = schurvectors(T, pi, n, israte, solver)
@@ -9,10 +9,10 @@ function pcca(T::Matrix, n::Integer; optimize = false, solver=BaseSolver())
     chi    = makeprobabilistic(X, optimize)
 end
 
-function isratematrix(T::Matrix)
+function isratematrix(T::AbstractMatrix)
     s = sum(T[1,:])
-    isapprox(s, 0) && return true
-    isapprox(s, 1) && return false
+    isapprox(s, 0, atol=1e-8) && return true
+    isapprox(s, 1, atol=1e-8) && return false
     error("given matrix is neither a rate nor a probability matrix")
 end
 
@@ -25,7 +25,7 @@ function stationarydensity(T, israte=isratematrix(T))
     pi = pi / sum(pi)
 end
 
-function makeprobabilistic(X::Matrix, optimize::Bool)
+function makeprobabilistic(X::AbstractMatrix, optimize::Bool)
     n = size(X, 2)
     A = innersimplexalgorithm(X)
     if n > 2 && optimize
@@ -40,7 +40,7 @@ end
 
 function assertstructure(X, pi)
 	@assert X' * Diagonal(pi) * X ≈ I
-	@assert X[:,1] ≈ ones(length(pi))
+	@assert all(isapprox.(X[:,1], 1, atol=1e-8))
 end
 
 # compute initial guess based on indexmap
