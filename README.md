@@ -5,7 +5,7 @@
 [![Build Status](https://github.com/axsk/PCCA.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/axsk/PCCA.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/axsk/PCCA.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/axsk/PCCA.jl)
 
-A [KISS](https://en.wikipedia.org/wiki/KISS_principle) style implementation of PCCA⁺ [1,2] with support for non-reversible systems [3].
+A [KISS](https://en.wikipedia.org/wiki/KISS_principle) style implementation of PCCA+ (Robust Perron Cluster Analysis) [1,2] with support for non-reversible systems [3].
 For a similar python implementation see also the [cmdtools](https://github.com/zib-cmd/cmdtools/) package.
 
 ## Basic usage
