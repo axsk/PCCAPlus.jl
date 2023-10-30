@@ -1,6 +1,9 @@
 using PCCA
 using Test
 
+using ArnoldiMethod
+using KrylovKit
+
 @testset "PCCA.jl" begin
     # Write your tests here.
     x = rand(10, 10)
@@ -15,8 +18,6 @@ using Test
         P ./= sum(P, dims=2)
     end
 
-
-
     @testset "Reversible = $rev" for rev in [true, false]
         P = [randomstochasticmatrix(3 + mod(i, 12), rev) for i in 1:10]
         @testset "Method $method" for method in [PCCA.BaseSolver, PCCA.ArnoldiSolver, PCCA.KrylovSolver]
@@ -30,5 +31,4 @@ using Test
             end
         end
     end
-
 end

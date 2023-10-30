@@ -1,6 +1,20 @@
 import Arpack: eigs
 using LinearAlgebra
 
+
+""" pcca(T, n; pi=nothing, optimize=false, solver=BaseSolver())
+
+performs the pcca clustering on the transition matrix `T` with `n` clusters.
+Here `T` can be either a stochastic propagator with row sum 1 or a rate matrix with row sum 0.
+
+- `pi` is a density for weighting the result. `pi=:auto` uses the stationary density
+- `optimize` uses the optimization from Roeblitz (2013) to improve crispness
+- `solver` is the solver to use for computing the schur decomposition. 
+   The BaseSolver() is built in. ArnoldiSolver() and KrylovSolver() require ArnoldiMethod.jl and KrylovKit.jl respectively and provide support for sparse matrices.
+
+Returns the membership matrix `chi`.
+"""
+
 function pcca(T::AbstractMatrix, n::Integer; pi=nothing, optimize=false, solver=BaseSolver())
     israte = isratematrix(T)
     if pi == :auto

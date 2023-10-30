@@ -1,9 +1,6 @@
 ### Schur Eigenspace solvers
 
-import KrylovKit
-import ArnoldiMethod
-
-# TODO: both ArnoldiSolver and KrylovSolver cut the subspace, this should warn or error
+# TODO: there should be at least warnings when cutting conjugate eigenvalues
 
 """ Uses Julia's built in LinearAlgebra.schur solver. This has no support for sparse matrices """
 struct BaseSolver end
@@ -28,19 +25,6 @@ function schurvectors(T, pi::Nothing, n, israte, solver)
     return X
 end
 
-function schurvecs(T, n, israte, ::ArnoldiSolver)
-    which = israte ? ArnoldiMethod.LR() : ArnoldiMethod.LM()
-    Q = ArnoldiMethod.partialschur(T; nev=n, which)[1].Q
-    Q[:, 1:n]
-end
-
-function schurvecs(T, n, israte, ::KrylovSolver)
-    which = israte ? :LR : :LM
-    R, Qs, = KrylovKit.schursolve(T, rand(size(T, 1)), n, which, KrylovKit.Arnoldi())
-    Q = reduce(hcat, Qs)
-    Q[:, 1:n]
-end
-
 using SparseArrays
 function schurvecs(T, n, israte, ::BaseSolver)
     issparse(T) && error("The `BaseSolver` does not support sparse matrices")
@@ -48,7 +32,6 @@ function schurvecs(T, n, israte, ::BaseSolver)
     Q, λ = selclusters!(S, n, israte)
     return Q
 end
-
 
 # select the schurvectors corresponding to the n largest real part of eigenvalues
 function selclusters!(S, n, israte)
