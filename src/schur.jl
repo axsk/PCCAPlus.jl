@@ -13,7 +13,7 @@ function schurvectors(T, pi, n, israte, solver)
     israte && warn("Current implementation only uses :LR as selection criterion, even for Q matrices.")
     D = Diagonal(sqrt.(pi))
     Tp = D * T * D^-1
-    Qp = schurvecs(Tp, n, solver)
+    Qp = schurvecs(Tp, n, israte, solver)
     X = D^-1 * Qp
     X .*= sign(X[1, 1])  # fix the sign for the constant eigenvector
     return X
