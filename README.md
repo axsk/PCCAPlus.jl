@@ -1,9 +1,9 @@
-# PCCA
+# PCCAPlus
 
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://axsk.github.io/PCCA.jl/stable)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://axsk.github.io/PCCA.jl/dev)
-[![Build Status](https://github.com/axsk/PCCA.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/axsk/PCCA.jl/actions/workflows/CI.yml?query=branch%3Amain)
-[![Coverage](https://codecov.io/gh/axsk/PCCA.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/axsk/PCCA.jl)
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://axsk.github.io/PCCAPlus.jl/stable)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://axsk.github.io/PCCAPlus.jl/dev)
+[![Build Status](https://github.com/axsk/PCCAPlus.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/axsk/PCCAPlus.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Coverage](https://codecov.io/gh/axsk/PCCAPlus.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/axsk/PCCAPlus.jl)
 
 A [KISS](https://en.wikipedia.org/wiki/KISS_principle) style implementation of PCCA+ (Robust Perron Cluster Analysis) [1,2] with support for non-reversible systems [3].
 For a similar python implementation see also the [cmdtools](https://github.com/zib-cmd/cmdtools/) package.
@@ -11,7 +11,7 @@ For a similar python implementation see also the [cmdtools](https://github.com/z
 ## Basic usage
 
 ```julia
-using PCCA
+using PCCAPlus
 
 P=rand(10,10)
 P = P ./ sum(P, dims=2) # row stochastic matrix

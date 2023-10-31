@@ -1,4 +1,4 @@
-module PCCA
+module PCCAPlus
 
 include("pccap.jl")
 include("schur.jl")

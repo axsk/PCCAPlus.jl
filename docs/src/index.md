@@ -1,14 +1,14 @@
 ```@meta
-CurrentModule = PCCA
+CurrentModule = PCCAPlus
 ```
 
-# PCCA
+# PCCAPlus
 
-Documentation for [PCCA](https://github.com/axsk/PCCA.jl).
+Documentation for [PCCAPlus](https://github.com/axsk/PCCAPlus.jl).
 
 ```@index
 ```
 
 ```@autodocs
-Modules = [PCCA]
+Modules = [PCCAPlus]
 ```

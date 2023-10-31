@@ -1,16 +1,16 @@
-using PCCA
+using PCCAPlus
 using Documenter
 
-DocMeta.setdocmeta!(PCCA, :DocTestSetup, :(using PCCA); recursive=true)
+DocMeta.setdocmeta!(PCCAPlus, :DocTestSetup, :(using PCCAPlus); recursive=true)
 
 makedocs(;
-    modules=[PCCA],
+    modules=[PCCAPlus],
     authors="Alexander Sikorski",
-    repo="https://github.com/axsk/PCCA.jl/blob/{commit}{path}#{line}",
-    sitename="PCCA.jl",
+    repo="https://github.com/axsk/PCCAPlus.jl/blob/{commit}{path}#{line}",
+    sitename="PCCAPlus.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://axsk.github.io/PCCA.jl",
+        canonical="https://axsk.github.io/PCCAPlus.jl",
         assets=String[],
     ),
     pages=[
@@ -19,6 +19,6 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/axsk/PCCA.jl",
+    repo="github.com/axsk/PCCAPlus.jl",
     devbranch="main",
 )

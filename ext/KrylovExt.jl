@@ -1,11 +1,11 @@
 module KrylovExt
-import PCCA
+import PCCAPlus
 import KrylovKit
 
 
 
 
-function PCCA.schurvecs(T, n, israte, ::PCCA.KrylovSolver)
+function PCCAPlus.schurvecs(T, n, israte, ::PCCAPlus.KrylovSolver)
     which = israte ? :LR : :LM
     R, Qs, = KrylovKit.schursolve(T, rand(size(T, 1)), n, which, KrylovKit.Arnoldi())
     Q = reduce(hcat, Qs)
