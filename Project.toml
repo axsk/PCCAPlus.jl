@@ -1,7 +1,7 @@
 name = "PCCAPlus"
 uuid = "f48fc343-7e38-490c-be15-e66d68689cd5"
 authors = ["Alexander Sikorski"]
-version = "0.2.0"
+version = "1.0.0"
 
 [deps]
 Arpack = "7d9fca2a-8960-54d3-9f78-7d1dccf2cb97"

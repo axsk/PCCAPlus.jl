@@ -26,7 +26,7 @@ P = P ./ sum(P, dims=2) # sparse row stochastic matrix
 
 # solve the PCCA+ problem weighted with the stationary density 
 # and optimize for crispness, using the KrylovKit.jl eigensolver
-chi = pcca(P, 2; pi=:auto, optimize=true, solver=KrylovSolver())
+chi = pcca(P, 2; pi=:stationary, optimize=true, solver=KrylovSolver())
 ```
 
 For sparse matrix support, add either the `ArnoldiMethod.jl` or `KrylovKit.jl` and pass the corresponding `ArnoldiSolver()` or `KrylovSolver()` as a solver.

@@ -1,9 +1,7 @@
 module KrylovExt
+
 import PCCAPlus
 import KrylovKit
-
-
-
 
 function PCCAPlus.schurvecs(T, n, israte, ::PCCAPlus.KrylovSolver)
     which = israte ? :LR : :LM
