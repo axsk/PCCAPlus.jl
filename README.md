@@ -17,7 +17,7 @@ P=rand(10,10)
 P = P ./ sum(P, dims=2) # row stochastic matrix
 
 # basic PCCA+ clustering with 2 clusters (using no weighting and the ISA initial guess only)
-chi = pcca(P, 2)        # 
+chi = pcca(P, 2)
 
 using KrylovKit
 using SparseArrays
@@ -32,6 +32,6 @@ chi = pcca(P, 2; pi=:stationary, optimize=true, solver=KrylovSolver())
 For sparse matrix support, add either the `ArnoldiMethod.jl` or `KrylovKit.jl` and pass the corresponding `ArnoldiSolver()` or `KrylovSolver()` as a solver.
 
 ## References
-1. 2006, M. Weber: Meshless Methods in Conformation Dynamics
-2. 2013, S. Röblitz, M. Weber: Fuzzy Spectral Clustering by PCCA+
-3. 2018, K. Fackeldey, A. Sikorski, M. Weber: Spectral Clustering for Non-Reversible Markov Chains
+1. [2006, M. Weber: Meshless Methods in Conformation Dynamics](https://opus4.kobv.de/opus4-zib/frontdoor/deliver/index/docId/1023/file/promotionweber.pdf)
+2. [2013, S. Röblitz, M. Weber: Fuzzy Spectral Clustering by PCCA+](https://doi.org/10.1007/s11634-013-0134-6)
+3. [2018, K. Fackeldey, A. Sikorski, M. Weber: Spectral Clustering for Non-Reversible Markov Chains](https://doi.org/10.1007/s40314-018-0697-0)
