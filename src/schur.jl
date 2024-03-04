@@ -1,5 +1,7 @@
 ### Schur Eigenspace solvers
 
+using SparseArrays
+
 # TODO: there should be at least warnings when cutting conjugate eigenvalues
 
 """ Uses Julia's built in LinearAlgebra.schur solver. This has no support for sparse matrices """
@@ -7,7 +9,11 @@ struct BaseSolver end
 """ Wrapper around the ArnoldiSolver.jl schur solver """
 struct ArnoldiSolver end
 """ Wrapper around the KrylovKit.jl schur solvers """
-struct KrylovSolver end
+struct KrylovSolver
+    kwargs
+end
+
+KrylovSolver(; kwargs...) = KrylovSolver(kwargs)
 
 function schurvectors(T, pi, n, israte, solver)
     israte && warn("Current implementation only uses :LR as selection criterion, even for Q matrices.")
@@ -27,7 +33,7 @@ end
 
 using SparseArrays
 function schurvecs(T, n, israte, ::BaseSolver)
-    issparse(T) && error("The `BaseSolver` does not support sparse matrices")
+    issparse(T) && error("The `BaseSolver` does not support sparse matrices, convert it to dense using `collect` or use the `ArnoldiSolver` or `KrylovSolver`")
     S = schur(T)
     Q, λ = selclusters!(S, n, israte)
     return Q

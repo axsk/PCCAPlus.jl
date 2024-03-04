@@ -22,7 +22,7 @@ using KrylovKit
         P = [randomstochasticmatrix(3 + mod(i, 12), rev) for i in 1:10]
         @testset "Method $method" for method in [PCCAPlus.BaseSolver, PCCAPlus.ArnoldiSolver, PCCAPlus.KrylovSolver]
             for P in P, n in 2:size(P, 1)-1
-                χ = pcca(P, n, solver=method(), optimize=true)
+                χ = pcca(P, n, solver=method(), optimize=true).chi
                 a = PCCAPlus.crispassignments(χ)
 
                 #@show χ

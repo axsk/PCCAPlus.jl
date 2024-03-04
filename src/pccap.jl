@@ -21,8 +21,10 @@ function pcca(T::AbstractMatrix, n::Integer; pi=nothing, optimize=false, solver=
         pi = stationarydensity(T, israte)
     end
     X = schurvectors(T, pi, n, israte, solver)
-    assertstructure(X, pi)
-    chi = makeprobabilistic(X, optimize)
+    #assertstructure(X, pi)
+    A = basistransform(X, optimize)
+    chi = X * A
+    return (; chi, X, A)
 end
 
 function isratematrix(T::AbstractMatrix)
@@ -41,13 +43,13 @@ function stationarydensity(T, israte=isratematrix(T))
     pi = pi / sum(pi)
 end
 
-function makeprobabilistic(X::AbstractMatrix, optimize::Bool)
+function basistransform(X::AbstractMatrix, optimize::Bool)
     n = size(X, 2)
     A = innersimplexalgorithm(X)
     if n > 2 && optimize
         A = opt(A, X)
     end
-    chi = X * A
+    return A
 end
 
 function crispassignments(chi)
