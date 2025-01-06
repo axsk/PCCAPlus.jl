@@ -1,7 +1,7 @@
 name = "PCCAPlus"
 uuid = "f48fc343-7e38-490c-be15-e66d68689cd5"
 authors = ["Alexander Sikorski"]
-version = "1.1.0"
+version = "1.1.1"
 
 [deps]
 Arpack = "7d9fca2a-8960-54d3-9f78-7d1dccf2cb97"
@@ -18,7 +18,7 @@ ArnoldiExt = "ArnoldiMethod"
 KrylovExt = "KrylovKit"
 
 [compat]
-ArnoldiMethod = "0.2"
+ArnoldiMethod = "0.2,0.3,0.4"
 Arpack = "0.5"
 KrylovKit = "0.5, 0.6"
 Optim = "1"
